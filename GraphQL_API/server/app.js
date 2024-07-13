@@ -2,7 +2,7 @@
 const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const { GraphQLSchema } = require('graphql');
-const { RootQuery } = require('./schema');
+const { RootQuery } = require('./schema/schema');
 
 const app = express();
 
