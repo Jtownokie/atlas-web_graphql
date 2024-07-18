@@ -4,9 +4,12 @@ const {
   GraphQLString,
   GraphQLInt,
   GraphQLID,
-  GraphQLList
+  GraphQLList,
+  GraphQLNonNull
 } = require('graphql');
 const _ = require('lodash');
+const Project = require('../models/project');
+const Task = require('../models/task');
 
 const TaskType = new GraphQLObjectType({
   name: 'Task',
@@ -16,7 +19,7 @@ const TaskType = new GraphQLObjectType({
     weight: { type: GraphQLInt },
     description: { type: GraphQLString },
     project: { 
-      type: TaskType,
+      type: ProjectType,
       resolve(parent, args) {
         return _.find(projects, { id: parent.projectId });
       }
@@ -108,8 +111,51 @@ const RootQuery = new GraphQLObjectType({
   }
 });
 
+const Mutation = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: {
+    addProject: {
+      type: ProjectType,
+      args: {
+        title: { type: new GraphQLNonNull(GraphQLString) },
+        weight: { type: new GraphQLNonNull(GraphQLInt) },
+        description: { type: new GraphQLNonNull(GraphQLString) },
+        tasks: { type: new GraphQLNonNull(new GraphQLList(GraphQLID))}
+      },
+      async resolve(parent, args) {
+        const newProject = new Project({
+          title: args.title,
+          weight: args.weight,
+          description: args.description,
+          tasks: args.tasks
+        });
+        return await newProject.save();
+      }
+    },
+    addTask: {
+      type: TaskType,
+      args: {
+        title: { type: new GraphQLNonNull(GraphQLString) },
+        weight: { type: new GraphQLNonNull(GraphQLInt) },
+        description: { type: new GraphQLNonNull(GraphQLString) },
+        projectId: { type: new GraphQLNonNull(GraphQLID)}
+      },
+      async resolve(parent, args) {
+        const newTask = new Task({
+          title: args.title,
+          weight: args.weight,
+          description: args.description,
+          projectId: args.projectId
+        });
+        return await newTask.save();
+      }
+    }
+  }
+});
+
 module.exports = {
   TaskType,
-  RootQuery
+  RootQuery,
+  Mutation
 };
 

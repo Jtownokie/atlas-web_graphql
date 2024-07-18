@@ -5,12 +5,13 @@ const Project = require('./models/project');
 const Task = require('./models/task');
 const { graphqlHTTP } = require('express-graphql');
 const { GraphQLSchema } = require('graphql');
-const { RootQuery } = require('./schema/schema');
+const { RootQuery, Mutation } = require('./schema/schema');
 
 const app = express();
 
 const schema = new GraphQLSchema({
-  query: RootQuery
+  query: RootQuery,
+  mutation: Mutation
 });
 
 app.use('/graphql',graphqlHTTP({
