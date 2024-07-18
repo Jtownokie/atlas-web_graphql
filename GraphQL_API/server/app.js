@@ -25,7 +25,7 @@ app.listen(4000, () => {
 app.use(express.json());
 
 // Mongoose Connection
-mongoose.connect("mongodb+srv://<username>:<password>@files-manager-cluster.rqhsejc.mongodb.net/?retryWrites=true&w=majority&appName=Files-Manager-Cluster", {
+mongoose.connect("mongodb+srv://jtownokie:mSSiw5pzzIamgYzq@files-manager-cluster.rqhsejc.mongodb.net/?retryWrites=true&w=majority&appName=Files-Manager-Cluster", {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
